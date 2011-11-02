@@ -4,21 +4,22 @@ import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CreateAccountActivity extends Activity {
 	
 	private ContasFaceis appState;
+	//private String METHOD;
 	TextView nameTV;
 	EditText nameET;
 	TextView particTV;
@@ -81,43 +82,23 @@ public class CreateAccountActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			
-			JSONObject JSonObject = null;
-	    	Http http = new Http();
 			String name = nameET.getText().toString();
 			String currency = currencyET.getText().toString();
+			
+			Account currentAccount = new Account(name, currency); 
+			appState.setcurrentAccount(currentAccount);
 			
 			accountInfo.add(0,new BasicNameValuePair("access_token", appState.getcurrentUser().getFBaccessToken()));
 			accountInfo.add(1,new BasicNameValuePair("name", name.toLowerCase()));
 			accountInfo.add(2,new BasicNameValuePair("currency", currency.toLowerCase()));
 
-	    	try {
-	    		JSonObject = http.doPost(appState.getURL()+"/account/",accountInfo);
-	    	} catch(Exception e) {
-	    		Log.e("HttpPost",e.getMessage());
-	    	}
+	    	if(appState.getcurrentAccount().createAccountonServer(appState.getURL(),accountInfo, appState.getcurrentUser())) { 
+	    		Toast.makeText(CreateAccountActivity.this, "Conta criada com sucesso.", Toast.LENGTH_LONG).show();
+	    		Intent intent = new Intent(CreateAccountActivity.this, AccountPageActivity.class);
+	    		CreateAccountActivity.this.startActivity(intent);
+	    	} else 
+	    		Toast.makeText(CreateAccountActivity.this, "Impossível criar conta.", Toast.LENGTH_LONG).show();
 		}
 	}
-	/*private final class AddParticWatcher implements TextWatcher {
-
-		@Override
-		public void afterTextChanged(Editable arg0) {
-			String email =  arg0.toString();
-			
-		}
-
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-			String email =  s.toString();
-			
-		}
-
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			String email =  s.toString();
-			
-		}
-		
-	}*/
-
+	
 }

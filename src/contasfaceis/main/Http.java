@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.*;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -21,59 +20,54 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class Http {
+	
+	private String METHOD;
 
 	public JSONObject doGet(String url) {
 	
-		//BufferedReader in = null;
-		JSONObject JSonObject = null;
-		BufferedReader reader = null;
-		try {		
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet();
-			request.setURI(new URI(url));
+		METHOD = "doGet";
+		
+		JSONObject JSon = new JSONObject();
+		
+		HttpClient client = new DefaultHttpClient();
+		HttpGet request = new HttpGet(url);
+		
+		try {
 			HttpResponse response = client.execute(request);
 			
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
 			if (statusCode == 200) {
 				HttpEntity entity = response.getEntity();
-				InputStream content = entity.getContent();
-				reader = new BufferedReader(
-						new InputStreamReader(content));
-				String line;
-				StringBuffer sb = new StringBuffer("");
-				while ((line = reader.readLine()) != null) {
-					sb.append(line);
-				}
-				
-				JSonObject = new JSONObject(sb.toString());
+				InputStream contentIS = entity.getContent();
+				String content = convertStreamtoString(contentIS);
+			
+				//if(content.startsWith("[")) {
+					JSon = new JSONObject(content);
+				//}
+				//else {
+					//JSONObject JSonObj = new JSONObject(content);
+					//JSon.put(JSonObj);
+				//}
+					
 			} else {
-				Log.e("HttpGet", "Failed to connect to server");
+				Log.e(this.getClass().getSimpleName()+"/"+METHOD, "Failed to connect to server");
 			}
-			return JSonObject;
-        } catch(Exception e) {
-        	Log.e("HttpGet",e.getMessage());
-        	JSonObject = null;
-        	return JSonObject;
-        } finally {
-        	if (reader != null) {
-        		try {
-        			reader.close();
-        		} catch (IOException e) {
-        			e.printStackTrace();
-        		}
-        	}       
-        }
+		} catch (Exception e) {
+			Log.e(this.getClass().getSimpleName()+"/"+METHOD,e.getMessage());
+		}
+		return JSon;
 	}
 	
 	public JSONObject doPost(String url, List<NameValuePair> pairs) {
 		
-		//BufferedReader in = null;
-		JSONObject JSonObject = null;
-		BufferedReader reader = null;
-		try {		
-			HttpClient client = new DefaultHttpClient();
-			HttpPost request = new HttpPost(url);
+		METHOD = "doPost";
+		
+		JSONObject JSon = new JSONObject();
+		HttpClient client = new DefaultHttpClient();
+		HttpPost request = new HttpPost(url);
+		
+		try {
 			request.setEntity(new UrlEncodedFormEntity(pairs));
 			HttpResponse response = client.execute(request);
 			
@@ -81,33 +75,43 @@ public class Http {
 			int statusCode = statusLine.getStatusCode();
 			if (statusCode == 200) {
 				HttpEntity entity = response.getEntity();
-				InputStream content = entity.getContent();
-				reader = new BufferedReader(
-						new InputStreamReader(content));
-				String line;
-				StringBuffer sb = new StringBuffer("");
-				while ((line = reader.readLine()) != null) {
-					sb.append(line);
-				}
-				
-				JSonObject = new JSONObject(sb.toString());
+				InputStream contentIS = entity.getContent();
+				String content = convertStreamtoString(contentIS);
+								
+				//if(content.startsWith("[")) {
+					JSon = new JSONObject(content);
+				/*}
+				else {
+					JSONObject JSonObj = new JSONObject(content);
+					JSon.put(JSonObj);
+				}*/
 			} else {
-				Log.e("HttpPost", "Failed to connect to server");
+				Log.e(this.getClass().getSimpleName()+"/"+METHOD, "Failed to connect to server");
 			}
-			return JSonObject;
-        } catch(Exception e) {
-        	Log.e("HttpPost",e.getMessage());
-        	JSonObject = null;
-        	return JSonObject;
-        } finally {
-        	if (reader != null) {
-        		try {
-        			reader.close();
-        		} catch (IOException e) {
-        			e.printStackTrace();
-        		}
-        	}       
-        }
+        } catch (Exception e) {
+			Log.e(this.getClass().getSimpleName()+"/"+METHOD,e.getMessage());
+		}
+		return JSon;
+	}
+	
+	public String convertStreamtoString(InputStream is) {
+		BufferedReader reader = new BufferedReader( new InputStreamReader(is));
+		String line = null;
+		StringBuffer sb = new StringBuffer("");
+		try {
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				Log.e(this.getClass().getSimpleName()+"/"+METHOD,e.getMessage());
+			}
+		}
+		return sb.toString();
 	}
 	
 }

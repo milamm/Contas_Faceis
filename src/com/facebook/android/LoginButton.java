@@ -16,11 +16,6 @@
 
 package com.facebook.android;
 
-import com.facebook.android.BaseRequestListener;
-import com.facebook.android.SessionEvents.AuthListener;
-import com.facebook.android.SessionEvents.LogoutListener;
-import com.facebook.android.Facebook.DialogListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -29,6 +24,10 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
+
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.SessionEvents.AuthListener;
+import com.facebook.android.SessionEvents.LogoutListener;
 
 public class LoginButton extends ImageButton {
     
@@ -50,12 +49,12 @@ public class LoginButton extends ImageButton {
         super(context, attrs, defStyle);
     }
     
-    public void init(final Activity activity, final Facebook fb) {
-    	init(activity, fb, new String[] {"email"});
+    public void init(final Activity activity, final Facebook fb, Context context) {
+    	init(activity, fb, new String[] {"email"}, context);
     }
     
     public void init(final Activity activity, final Facebook fb,
-                     final String[] permissions) {
+                     final String[] permissions, Context context) {
         mActivity = activity;
         mFb = fb;
         mPermissions = permissions;
@@ -63,6 +62,15 @@ public class LoginButton extends ImageButton {
         
         setBackgroundColor(Color.TRANSPARENT);
         setAdjustViewBounds(true);
+        /*if(fb.isSessionValid()) {
+        	Context c = mActivity.getApplicationContext();
+        	Intent intent = new Intent(c, UserPageActivity.class);
+        	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	this.getContext().startActivity(intent);
+        } else {
+        	setImageResource(R.drawable.login_button);
+        }
+    	drawableStateChanged();*/
         setImageResource(fb.isSessionValid() ?
                          R.drawable.logout_button : 
                          R.drawable.login_button);
@@ -81,7 +89,7 @@ public class LoginButton extends ImageButton {
                 AsyncFacebookRunner asyncRunner = new AsyncFacebookRunner(mFb);
                 asyncRunner.logout(getContext(), new LogoutRequestListener());
             } else {
-                mFb.authorize(mActivity, mPermissions,
+                mFb.authorize(mActivity, mPermissions,Facebook.FORCE_DIALOG_AUTH,
                               new LoginDialogListener());
             }
         }
