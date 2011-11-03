@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.facebook.android.AsyncFacebookRunner;
@@ -55,6 +56,34 @@ public class MainActivity extends Activity {
         Context context = getApplicationContext();
         mLoginButton.init(this, appState.getFacebook(),context);
 
+    }
+    
+    /* (non-Javadoc)
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        boolean sessionsaved=SessionStore.restore(appState.getFacebook(), this);
+        Log.i("MainActivity","Sessionsaved : "+ sessionsaved);
+        if(sessionsaved) {
+            if(appState.getcurrentUser()==null) {
+                String accesstoken = appState.getFacebook().getAccessToken();
+                User user = new User(accesstoken);
+                
+                appState.setcurrentUser(user);
+                JSONObject JSONUser = appState.getcurrentUser().getUserInformationFromServer(appState.getURL()); 
+                if(appState.getcurrentUser().setParameters(JSONUser)) {
+                    Intent intent = new Intent(MainActivity.this, UserPageActivity.class);
+                    MainActivity.this.startActivity(intent);
+                } else
+                    mText.setText("Usuario desconhecido.");
+                }
+                Intent intent = new Intent(MainActivity.this, UserPageActivity.class);
+                MainActivity.this.startActivity(intent);
+            
+        }
     }
 
     @Override
