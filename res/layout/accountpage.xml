@@ -1,54 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-       	android:id="@+id/nametv"
-       	android:layout_width="wrap_content"
-       	android:layout_height="wrap_content"
-       	android:text="Nome:"/>
-    <TextView
-       	android:id="@+id/name"
-       	android:layout_width="wrap_content"
-       	android:layout_height="wrap_content"/>
-    <TextView
-       	android:id="@+id/currencytv"
-       	android:layout_width="wrap_content"
-       	android:layout_height="wrap_content"
-       	android:text="Moeda:"/>
-    <TextView
-       	android:id="@+id/currency"
-       	android:layout_width="wrap_content"
-       	android:layout_height="wrap_content"/>
-    <ListView
-        android:id="@+id/participantList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:layout_below="@+id/createAccount"
-        android:headerDividersEnabled="true">
-    </ListView>
+    <TextView android:id="@+id/username"
+       		  android:layout_width="wrap_content"
+       		  android:layout_height="wrap_content"
+       		  android:layout_alignParentLeft="true"/>
+    <TextView android:id="@+id/accname"
+       	 	  android:layout_width="wrap_content"
+       		  android:layout_height="wrap_content"
+       		  android:layout_below="@+id/username"
+	  	      android:layout_centerHorizontal="true"
+       		  android:textSize="30sp"/>
+    <TextView android:id="@+id/currencytv"
+       		  android:layout_width="wrap_content"
+       		  android:layout_height="wrap_content"
+       		  android:layout_below="@+id/accname"
+       		  android:layout_toLeftOf="@+id/currency"
+       		  android:text="Moeda:"/>
+    <TextView android:id="@+id/currency"
+       	 	  android:layout_width="wrap_content"
+       		  android:layout_height="wrap_content"
+       		  android:layout_alignParentRight="true"
+       		  android:layout_below="@+id/accname"
+       		  android:paddingLeft="10sp"
+       		  android:paddingRight="10sp"/>
+    <TableLayout android:id="@+id/participantList"
+        		 android:layout_width="fill_parent"
+        		 android:layout_height="wrap_content"
+        		 android:layout_below="@+id/currencytv"
+        		 android:stretchColumns="0">
+        <TableRow>
+            <TextView android:id="@+id/nameTitle"
+                	  android:textSize="15sp"
+                	  android:padding="5dp"
+                	  android:text="Nome">
+			</TextView>
+			<TextView android:id="@+id/totalTitle"
+	    	  	 	  android:textSize="15sp"
+    		  		  android:padding="5dp" 
+    		  		  android:text="Total">
+			</TextView>
+			<TextView android:id="@+id/balanceTitle"
+	    	  		  android:textSize="15sp"
+    		  		  android:padding="5dp" 
+    		  		  android:text="Saldo">
+			</TextView>   
+        </TableRow>
+    </TableLayout>
     <Button
         android:id="@+id/refusebt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/participantList"
+        android:layout_toLeftOf="@+id/acceptbt"
         android:text="Recusar"
-        android:visibility="invisible">
+        android:enabled="false"
+        android:visibility="invisible"
+        >
     </Button>
     <Button
         android:id="@+id/acceptbt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/participantList"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="Aceitar"
-        android:visibility="invisible">
-    </Button>
-    <Button
-        android:id="@+id/deletebt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deletar"
+        android:enabled="false"
         android:visibility="invisible">
     </Button>
 
-</LinearLayout>
+</RelativeLayout>

@@ -49,12 +49,12 @@ public class LoginButton extends ImageButton {
         super(context, attrs, defStyle);
     }
     
-    public void init(final Activity activity, final Facebook fb, Context context) {
-    	init(activity, fb, new String[] {"email"}, context);
+    public void init(final Activity activity, final Facebook fb) {
+    	init(activity, fb, new String[] {"email"});
     }
     
     public void init(final Activity activity, final Facebook fb,
-                     final String[] permissions, Context context) {
+                     final String[] permissions) {
         mActivity = activity;
         mFb = fb;
         mPermissions = permissions;
@@ -62,15 +62,6 @@ public class LoginButton extends ImageButton {
         
         setBackgroundColor(Color.TRANSPARENT);
         setAdjustViewBounds(true);
-        /*if(fb.isSessionValid()) {
-        	Context c = mActivity.getApplicationContext();
-        	Intent intent = new Intent(c, UserPageActivity.class);
-        	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	this.getContext().startActivity(intent);
-        } else {
-        	setImageResource(R.drawable.login_button);
-        }
-    	drawableStateChanged();*/
         setImageResource(fb.isSessionValid() ?
                          R.drawable.logout_button : 
                          R.drawable.login_button);

@@ -24,6 +24,8 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 	}*/
+	public User() {
+	}
 	
 	public User(String accessToken) {
 		FBaccessToken = accessToken;
@@ -72,6 +74,10 @@ public class User {
 	
 	public String getLastName() {
 		return lastName;
+	}
+	
+	public String getName() {
+		return firstName+" "+lastName;
 	}
 	
 	public String getEmail() {

@@ -2,4 +2,9 @@
 <resources>
     <string name="hello">Bem-vindo à Applicacão Contas Faceis!</string>
     <string name="app_name">ContasFaceis</string>
+    
+    <string name="addpay">Adicionar pagamento</string>
+    <string name="seehist">Ver Histórico</string>
+    <string name="calculate">Calcular</string>
+    <string name="delete">Deletar</string>
 </resources>

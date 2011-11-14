@@ -3,7 +3,6 @@ package contasfaceis.main;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,8 +52,7 @@ public class MainActivity extends Activity {
         SessionStore.restore(appState.getFacebook(), this);
         SessionEvents.addAuthListener(new SampleAuthListener());
         SessionEvents.addLogoutListener(new SampleLogoutListener());
-        Context context = getApplicationContext();
-        mLoginButton.init(this, appState.getFacebook(),context);
+        mLoginButton.init(this, appState.getFacebook());
 
     }
     
