@@ -29,7 +29,7 @@
     <EditText
         android:id="@+id/currency"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
     </EditText>
 
     <TextView
@@ -42,7 +42,8 @@
     <EditText
         android:id="@+id/partic"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:inputType="textEmailAddress">
     </EditText>
         
     <Button

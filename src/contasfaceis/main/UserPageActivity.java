@@ -118,8 +118,7 @@ public class UserPageActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			System.out.println("getView " + position + " " + convertView
 					+ "Size " + this.getCount());
-			// LayoutInflater mInflater =
-			// (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 			TextView TV = null;
 			ParticipantAccount particAcc = mData.get(position);
 
@@ -139,26 +138,7 @@ public class UserPageActivity extends Activity {
 			} else {
 				TV.setTypeface(Typeface.DEFAULT_BOLD);
 				TV.setTextColor(Color.RED);
-				// pendingaccounts = true;
 			}
-			/*
-			 * if (convertView == null) { if(particStatus.equals("CONFIRMED")) {
-			 * convertView = mInflater.inflate(R.layout.listuseraccounts_item,
-			 * null); TV =
-			 * (TextView)convertView.findViewById(R.id.useraccconfirmed); } else
-			 * { convertView =
-			 * mInflater.inflate(R.layout.listuseraccountspending_item, null);
-			 * TV = (TextView)convertView.findViewById(R.id.useraccpending); }
-			 * //holder = new ViewHolder(); //holder.textView =
-			 * (TextView)convertView.findViewById(R.id.text);
-			 * //convertView.setTag(holder); } else {
-			 */
-			// holder = (ViewHolder)convertView.getTag();
-
-			// }
-
-			// holder.textView.setText(mData.get(position));
-			// return convertView;
 			return row;
 		}
 	}

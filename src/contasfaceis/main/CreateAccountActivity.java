@@ -19,7 +19,7 @@ import android.widget.Toast;
 public class CreateAccountActivity extends Activity {
 	
 	private ContasFaceis appState;
-	//private String METHOD;
+	
 	TextView nameTV;
 	EditText nameET;
 	TextView particTV;
@@ -28,7 +28,7 @@ public class CreateAccountActivity extends Activity {
 	EditText currencyET;
 	Button addparticBT;
 	Button createaccBT;
-	//int npartic;
+	
 	ArrayList<NameValuePair> accountInfo;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +48,8 @@ public class CreateAccountActivity extends Activity {
     	addparticBT.setOnClickListener(new AddPartButtonOnClickListener());
     	createaccBT = (Button) this.findViewById(R.id.createacc);
     	createaccBT.setOnClickListener(new CreateAccButtonOnClickListener());
-    	//String particEmail = participant.getText().toString();
-    	//participant.addTextChangedListener(new AddParticWatcher());
     	
     	accountInfo = new ArrayList<NameValuePair>();
-    	//npartic = 0;
 	}
 	
 	private final class AddPartButtonOnClickListener implements OnClickListener {
@@ -63,7 +60,6 @@ public class CreateAccountActivity extends Activity {
 			String email = participant.getText().toString();
 			participant.setText("");
 			
-			//Pattern p = Pattern.compile("\b[A-Z0-9._%+-]+@[A-Z0-9.-]\b");
 			if(email.matches("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
 				TextView particAddedtv = new TextView(v.getContext());
 				particAddedtv.setText(email);
@@ -73,7 +69,6 @@ public class CreateAccountActivity extends Activity {
 				parent.addView(particAddedtv,i);
 				
 				accountInfo.add(new BasicNameValuePair("emails",email));
-				//npartic++;
 			}
 		}
 	}

@@ -12,9 +12,8 @@
        	android:textAppearance="?android:attr/textAppearanceMedium" />
     <com.facebook.android.LoginButton
 		android:id="@+id/logout" android:src="@drawable/logout_button"
-		android:layout_width="match_parent" android:layout_height="wrap_content"
-		android:layout_gravity="right"  
-		android:layout_toRightOf="@+id/greeting"/>
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"  />
     <Button
         android:id="@+id/createAccount"
         android:layout_width="fill_parent"

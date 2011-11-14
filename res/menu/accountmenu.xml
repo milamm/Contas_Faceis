@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item android:id="@+id/addexpense"
+	      android:title="@string/addpay"/>
+    <item android:id="@+id/calculate"
+	      android:title="@string/calculate"/>
+	<item android:id="@+id/seehist"
+	      android:title="@string/seehist"/>
+	<item android:id="@+id/deleteacc"
+	      android:title="@string/delete"/>
+</menu>

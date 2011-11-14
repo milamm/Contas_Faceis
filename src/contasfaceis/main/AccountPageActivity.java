@@ -2,6 +2,11 @@ package contasfaceis.main;
 
 import java.util.ArrayList;
 
+import com.facebook.android.LoginButton;
+import com.facebook.android.SessionEvents;
+import com.facebook.android.SessionStore;
+import com.facebook.android.SessionEvents.LogoutListener;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,9 +23,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import contasfaceis.main.Account.AccException;
+import contasfaceis.main.UserPageActivity.SampleLogoutListener;
 
 public class AccountPageActivity extends Activity {
 	private TextView username;
+	private LoginButton logoutButton;
 	private TextView accname;
 	private TextView currencyTV;
 	private TextView currency;
@@ -42,6 +49,12 @@ public class AccountPageActivity extends Activity {
 
 		username = (TextView) this.findViewById(R.id.username);
 		username.setText(appState.getcurrentUser().getFirstName());
+		
+		logoutButton = (LoginButton) this.findViewById(R.id.logout);
+		SessionStore.restore(appState.getFacebook(), this);
+		SessionEvents.addLogoutListener(new SampleLogoutListener());
+		logoutButton.init(this, appState.getFacebook());
+		
 		accname = (TextView) this.findViewById(R.id.accname);
 		accname.setText(currentAccount.getName());
 		currencyTV = (TextView) this.findViewById(R.id.currencytv);
@@ -106,7 +119,7 @@ public class AccountPageActivity extends Activity {
 	    switch (item.getItemId()) {
 	    case R.id.addexpense:
 	    	Intent intentExp = new Intent(AccountPageActivity.this,
-					AddAxpenseActivity.class);
+					AddExpenseActivity.class);
 			AccountPageActivity.this.startActivity(intentExp);
 	        return true;
 	    case R.id.calculate:
@@ -201,4 +214,20 @@ public class AccountPageActivity extends Activity {
 			}
 		}
 	}
+	
+	public class SampleLogoutListener implements LogoutListener {
+		public void onLogoutBegin() {
+			Toast.makeText(AccountPageActivity.this, "Logging out...",
+					Toast.LENGTH_LONG).show();
+		}
+
+		public void onLogoutFinish() {
+			Toast.makeText(AccountPageActivity.this, "You have logged out! ",
+					Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(AccountPageActivity.this,
+					MainActivity.class);
+			AccountPageActivity.this.startActivity(intent);
+		}
+	}
+
 }

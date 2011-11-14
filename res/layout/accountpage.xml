@@ -7,7 +7,12 @@
     <TextView android:id="@+id/username"
        		  android:layout_width="wrap_content"
        		  android:layout_height="wrap_content"
-       		  android:layout_alignParentLeft="true"/>
+       		  android:layout_alignParentLeft="true"
+       		  android:text="mila"/>
+    <com.facebook.android.LoginButton
+		android:id="@+id/logout" android:src="@drawable/logout_button"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"/>
     <TextView android:id="@+id/accname"
        	 	  android:layout_width="wrap_content"
        		  android:layout_height="wrap_content"
