@@ -1,5 +1,7 @@
 package contasfaceis.main;
 
+import java.util.ArrayList;
+
 public class ParticipantAccount {
 	
 	private User user;
@@ -7,6 +9,9 @@ public class ParticipantAccount {
 	private String status;
 	private String role;
 	private int id;
+	private Double totalSpent;
+	private Double balance;
+	private ArrayList<String[]> debitcreditList = new ArrayList<String[]>();
 	
 	ParticipantAccount(User u, Account a, String s, String r, int id) {
 		user = u;
@@ -41,5 +46,29 @@ public class ParticipantAccount {
 	
 	public int getID() {
 		return id;
+	}
+	
+	public Double getTotalSpent() {
+		return totalSpent;
+	}
+	
+	public Double getBalance() {
+		return balance;
+	}
+	
+	public ArrayList<String[]> getDebitCreditList() {
+		return debitcreditList;
+	}
+	
+	public void setTotalSpent(Double totalSpent) {
+		this.totalSpent = totalSpent;
+	}
+	
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+
+	public void addDebitCredit(String[] debitcredit) {
+		debitcreditList.add(debitcredit);
 	}
 }

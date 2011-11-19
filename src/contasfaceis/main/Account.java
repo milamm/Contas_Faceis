@@ -17,6 +17,7 @@ public class Account {
 	private String currency;
 	private Integer id;
 	private ArrayList<ParticipantAccount> participAccount;
+	private Double unitCost;
 	
 	Account(String name, String currency) {
 		this.name = name;
@@ -60,12 +61,20 @@ public class Account {
 		}
 	}
 	
+	public void setUnitCost(Double unitCost) {
+		this.unitCost = unitCost;
+	}
+	
 	public String getName() {
 		return name;
 	}
 	
 	public String getCurrency() {
 		return currency;
+	}
+	
+	public Double getUnitCost() {
+		return unitCost;
 	}
 	
 	public ArrayList<ParticipantAccount> getParticipants() {
@@ -169,6 +178,70 @@ public class Account {
 		}
 		return false;
 	}
+	
+	public boolean calculate(String URL, String accesstoken) throws AccException{
+		METHOD = "calculate";
+		
+		JSONObject JSon = null;
+		Http http = new Http();
+	
+		try {
+			JSon = http.doGet(URL+"/account/"+id.toString()+"/result/"+accesstoken);
+			if(!JSon.isNull("resultParticipants")) {
+				JSONArray participantList = JSon.getJSONArray("resultParticipants");
+				JSONArray transactionstoResolve = JSon.getJSONArray("transactionsToResolve");
+				
+				for(int i=0; i<participantList.length(); i++) {
+					JSONObject participant = participantList.getJSONObject(i);
+					String email = participant.getString("email");
+					
+					//Update participant account relation of user with email = 'email'
+					for(int j=0; j<this.participAccount.size(); j++) {
+						ParticipantAccount particAcc = this.participAccount.get(j); 
+						if(particAcc.getUser().getEmail().equals(email)) {
+							Double balance = participant.getDouble("balance");
+							//String balanceStr = participant.getString("balance");
+							Double amountSpent = participant.getDouble("amountSpent");
+							
+							/*if(balanceStr.startsWith("-"))
+								balance = Double.valueOf(balanceStr.substring(1));
+							else
+								balance = Double.valueOf(balanceStr);*/
+							
+							particAcc.setBalance(balance);
+							particAcc.setTotalSpent(amountSpent);
+							
+							//Search for credit or debit transaction for this user
+							for(int k=0; k<transactionstoResolve.length(); k++) {
+								JSONObject beneficiary_payor = transactionstoResolve.getJSONObject(k);
+								JSONObject beneficiary = beneficiary_payor.getJSONObject("beneficiary");
+								JSONObject payor = beneficiary_payor.getJSONObject("payor");
+								Double amount = beneficiary_payor.getDouble("amount");
+								
+								if(beneficiary.getString("email").equals(email)) { 								   //User should receive 
+									String[] creditStr = { "receive", amount.toString(), payor.getString("name")}; 
+									particAcc.addDebitCredit(creditStr);
+								} else if (payor.getString("email").equals(email)) {   							   //User should pay
+									String[] debitStr = { "owes", amount.toString(), beneficiary.getString("name")}; 
+									particAcc.addDebitCredit(debitStr);
+								}
+							}
+						}
+					}
+				}
+				Double unitCost = JSon.getDouble("unitCost");
+				setUnitCost(unitCost);
+				return true;
+			}
+			if(!JSon.isNull("error")) {
+				throw new AccException(JSon.getString("error"));
+			}
+		} catch(JSONException JSe) {
+			Log.e(this.getClass().getSimpleName()+"/"+METHOD,JSe.getMessage());
+			return false;
+		}
+		return false;
+	}
 
 	public boolean deleteAccount(String URL, String accesstoken) throws AccException {
 		METHOD = "deleteAccount";
@@ -187,15 +260,6 @@ public class Account {
 			Log.e(this.getClass().getSimpleName()+"/"+METHOD,JSe.getMessage());
 			return false;
 		}
-			/*for(int i=0;i<participantsList.length();i++) {
-				JSONObject participant = participantsList.getJSONObject(i);
-				if(!participant.getString("role").equals("ADMIN")) {
-					JSONObject user = participant.getJSONObject("user");
-					User u = new User(user.getString("firstName"),user.getString("lastName"),user.getString("email"));
-					particAcc = new ParticipantAccount(u, this, participant.getString("status"), participant.getString("role"));
-					participAccount.add(particAcc);
-				}
-			}*/
 		return false;
 	}
 	

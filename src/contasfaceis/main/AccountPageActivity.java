@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -32,11 +34,14 @@ public class AccountPageActivity extends Activity {
 	private TextView currencyTV;
 	private TextView currency;
 	private TableLayout participantList;
+	private TextView unitCostTV;
+	private TableLayout debitcreditTL;
 	private Button BT1, BT2;
 
 	private ContasFaceis appState;
 	private Account currentAccount;
 	private ArrayList<ParticipantAccount> particList;
+	private Boolean newUser = false;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +65,8 @@ public class AccountPageActivity extends Activity {
 		currencyTV = (TextView) this.findViewById(R.id.currencytv);
 		currency = (TextView) this.findViewById(R.id.currency);
 		currency.setText(currentAccount.getCurrency());
+		unitCostTV = (TextView) this.findViewById(R.id.unitcostTv);
+		debitcreditTL = (TableLayout) this.findViewById(R.id.debitcreditTl);
 
 		if (pA.getStatus().equals("PENDING")) {
 			BT1 = (Button) this.findViewById(R.id.refusebt);
@@ -85,8 +92,6 @@ public class AccountPageActivity extends Activity {
 				particList = currentAccount.getParticipants();
 			
 			populateParticipantTable();
-			//listAdapter = new ParticCustomAdapter();
-			//participantList.setAdapter(listAdapter);
 		} catch (AccException e) {
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
@@ -101,13 +106,25 @@ public class AccountPageActivity extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem item = menu.findItem(R.id.deleteacc);
+		MenuItem DelItem = menu.findItem(R.id.deleteacc);
+		MenuItem CalcItem = menu.findItem(R.id.calculate);
+		MenuItem AddPayItem = menu.findItem(R.id.addexpense);
+		MenuItem SeeHistItem = menu.findItem(R.id.seehist);
 
 		if(appState.getcurrentParticipantAccount().getRole().equals("USER")) {
-			item.setEnabled(false);
-			item.setVisible(false);
+			DelItem.setEnabled(false);
+			DelItem.setVisible(false);
 		}
-			
+		
+		if(newUser) {
+			CalcItem.setEnabled(false);
+			CalcItem.setVisible(false);
+			AddPayItem.setEnabled(false);
+			AddPayItem.setVisible(false);
+			SeeHistItem.setEnabled(false);
+			SeeHistItem.setVisible(false);
+		}
+		
 		return true;
 	}
 	
@@ -123,6 +140,16 @@ public class AccountPageActivity extends Activity {
 			AccountPageActivity.this.startActivity(intentExp);
 	        return true;
 	    case R.id.calculate:
+	    	try {
+	    		if(currentAccount.calculate(appState.getURL(), appState.getcurrentUser().getFBaccessToken())) {
+	    			updateParticipantTable();
+	    			showTransactionstoResolve();
+	    		} else
+	    			Toast.makeText(this, "Erro ao fazer os cálculos", Toast.LENGTH_LONG);
+	    	} catch(AccException accE) {
+	    		Toast.makeText(AccountPageActivity.this, accE.getMessage(),
+						Toast.LENGTH_LONG);
+	    	}
 	        return true;
 	    case R.id.seehist:
 	        return true;
@@ -165,19 +192,81 @@ public class AccountPageActivity extends Activity {
 			if(particList.get(i).getStatus().equals("PENDING")) {
 				name.setTypeface(Typeface.DEFAULT_BOLD);
 				name.setTextColor(Color.RED);
+				newUser = true;
 			}
 			row.addView(name);
 			
 			TextView total = new TextView(this);
-			total.setText("teste");
+			total.setText("0");
 			row.addView(total);
 			
 			TextView balance = new TextView(this);
-			balance.setText("teste");
+			balance.setText("0");
 			row.addView(balance);
 			
 			participantList.addView(row);
 		}
+	}
+	
+	private void updateParticipantTable() {
+		particList = currentAccount.getParticipants();
+		
+		for(int i=0; i<particList.size();i++) {
+	
+			ParticipantAccount participant = particList.get(i);
+			
+			TableRow row = (TableRow) participantList.getChildAt(i+1);
+			TextView totalTV = (TextView) row.getChildAt(1);
+			TextView balanceTV = (TextView) row.getChildAt(2);
+			
+			totalTV.setText(participant.getTotalSpent().toString());
+			balanceTV.setText(participant.getBalance().toString());
+		}
+	}
+	
+	private void showTransactionstoResolve() {
+		String[] receiveCurUser = {"Você deve receber", "de"};
+		String[] payCurUser = {"Você deve", "à"};
+		String[] pay = {"deve", "à"};
+		
+		unitCostTV.setEnabled(true);
+		debitcreditTL.setEnabled(true);
+	    debitcreditTL.removeAllViews();
+		
+		unitCostTV.setText("Custo por pessoa = "+currentAccount.getUnitCost().toString());
+		
+		for(int i=0; i<particList.size(); i++) {
+			ParticipantAccount participant = particList.get(i); 
+			String email = participant.getUser().getEmail();
+			TextView debitcreditTV = new TextView(this);
+			ArrayList<String[]> debitcreditList = participant.getDebitCreditList();
+			User currentUser = appState.getcurrentUser(); 
+			
+			if(currentUser.getEmail().equals(email)) {
+						
+				for(int j=0; j<debitcreditList.size(); j++) {
+					String[] debitcredit = debitcreditList.get(j);
+					
+					if(debitcredit[0].equals("receive"))
+						debitcreditTV.setText(receiveCurUser[0]+" "+debitcredit[1]+" "+receiveCurUser[1]+" "+debitcredit[2]);
+					else
+						debitcreditTV.setText(payCurUser[0]+" "+debitcredit[1]+" "+payCurUser[1]+" "+debitcredit[2]);
+					debitcreditTL.addView(debitcreditTV, 0);
+				}
+				
+			} else {
+				
+				for(int j=0; j<debitcreditList.size(); j++) {
+					String[] debitcredit = debitcreditList.get(j);
+					
+					if(debitcredit[0].equals("owes") & !debitcredit[2].equals(currentUser.getName()))
+						debitcreditTV.setText(participant.getUser().getName()+" "+pay[0]+" "+debitcredit[1]+" "+pay[1]+" "+debitcredit[2]);
+					debitcreditTL.addView(debitcreditTV);
+				}
+				
+			}
+		}
+		
 	}
 	
 	private class ButtonOnClickListener implements OnClickListener {

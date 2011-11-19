@@ -7,8 +7,7 @@
     <TextView android:id="@+id/username"
        		  android:layout_width="wrap_content"
        		  android:layout_height="wrap_content"
-       		  android:layout_alignParentLeft="true"
-       		  android:text="mila"/>
+       		  android:layout_alignParentLeft="true"/>
     <com.facebook.android.LoginButton
 		android:id="@+id/logout" android:src="@drawable/logout_button"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -54,6 +53,18 @@
     		  		  android:text="Saldo">
 			</TextView>   
         </TableRow>
+    </TableLayout>
+    <TextView android:id="@+id/unitcostTv"
+        	  android:layout_width="wrap_content"
+        	  android:layout_height="wrap_content"
+        	  android:layout_below="@+id/participantList"
+        	  android:enabled="false"
+        	 />
+    <TableLayout android:id="@+id/debitcreditTl"
+        	  android:layout_width="wrap_content"
+        	  android:layout_height="wrap_content"
+        	  android:layout_below="@+id/unitcostTv"
+        	  android:enabled="false">
     </TableLayout>
     <Button
         android:id="@+id/refusebt"
