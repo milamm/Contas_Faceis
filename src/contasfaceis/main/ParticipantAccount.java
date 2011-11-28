@@ -67,8 +67,19 @@ public class ParticipantAccount {
 	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
-
+	 
+	public void setDebitCreditList(ArrayList<String[]> debitcreditlist) {
+		if(debitcreditlist==null)
+			debitcreditList = new ArrayList<String[]>();
+		else 
+			debitcreditList = debitcreditlist;
+	}
+	
 	public void addDebitCredit(String[] debitcredit) {
 		debitcreditList.add(debitcredit);
+	}
+
+	public void setStatus(String status) {
+		this.status = status; 
 	}
 }

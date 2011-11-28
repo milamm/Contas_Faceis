@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
        	android:id="@+id/greeting"
-       	android:layout_width="wrap_content"
-       	android:layout_height="wrap_content"
        	android:layout_marginLeft="10dp"
        	android:layout_marginTop="20dp"
-       	android:textAppearance="?android:attr/textAppearanceMedium" />
+       	android:textAppearance="?android:attr/textAppearanceMedium"
+       	android:background="@android:drawable/button_onoff_indicator_off" />
     <com.facebook.android.LoginButton
 		android:id="@+id/logout" android:src="@drawable/logout_button"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_height="40dp"
 		android:layout_alignParentRight="true"  />
     <Button
         android:id="@+id/createAccount"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/logout"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Criar Conta" />
+        android:layout_below="@+id/greeting"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Criar Conta" 
+        android:textColor="@drawable/green"/>
     
     <ListView
-        android:id="@+id/accountList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:id="@+id/accountList" 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/createAccount"
-        android:headerDividersEnabled="true">
+        android:divider="@drawable/black"
+        android:background="@android:drawable/button_onoff_indicator_off">
     </ListView>
 
 </RelativeLayout>

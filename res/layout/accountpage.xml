@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/accpagelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView android:id="@+id/username"
-       		  android:layout_width="wrap_content"
-       		  android:layout_height="wrap_content"
+        	  android:background="@android:drawable/button_onoff_indicator_off"
        		  android:layout_alignParentLeft="true"/>
     <com.facebook.android.LoginButton
 		android:id="@+id/logout" android:src="@drawable/logout_button"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"/>
     <TextView android:id="@+id/accname"
-       	 	  android:layout_width="wrap_content"
-       		  android:layout_height="wrap_content"
+         	  android:background="@android:drawable/button_onoff_indicator_off"
+       	 	  android:layout_width="fill_parent"
        		  android:layout_below="@+id/username"
 	  	      android:layout_centerHorizontal="true"
+	  	      android:gravity="center_horizontal"
        		  android:textSize="30sp"/>
     <TextView android:id="@+id/currencytv"
-       		  android:layout_width="wrap_content"
-       		  android:layout_height="wrap_content"
        		  android:layout_below="@+id/accname"
        		  android:layout_toLeftOf="@+id/currency"
-       		  android:text="Moeda:"/>
+       		  android:layout_margin="0dp"
+       		  android:text="Moeda:"
+       		  android:textColor="@drawable/black"/>
     <TextView android:id="@+id/currency"
-       	 	  android:layout_width="wrap_content"
-       		  android:layout_height="wrap_content"
        		  android:layout_alignParentRight="true"
        		  android:layout_below="@+id/accname"
-       		  android:paddingLeft="10sp"
-       		  android:paddingRight="10sp"/>
+       		  android:layout_margin="0dp"
+       		  android:textColor="@drawable/black"/>
     <TableLayout android:id="@+id/participantList"
+        	     android:background="@android:drawable/button_onoff_indicator_off"
         		 android:layout_width="fill_parent"
-        		 android:layout_height="wrap_content"
         		 android:layout_below="@+id/currencytv"
-        		 android:stretchColumns="0">
-        <TableRow>
+        		 android:padding="0dp"
+        		 android:layout_margin="0dp"
+        		 android:scrollbars="vertical">
+        <TableRow android:layout_width="fill_parent"
+            	  android:background="@android:drawable/button_onoff_indicator_off"
+            	  android:padding="0dp"
+        		  android:layout_margin="0dp">
             <TextView android:id="@+id/nameTitle"
-                	  android:textSize="15sp"
-                	  android:padding="5dp"
+        		 	  android:ellipsize="end"
+        		 	  android:layout_margin="0dp"
                 	  android:text="Nome">
 			</TextView>
 			<TextView android:id="@+id/totalTitle"
-	    	  	 	  android:textSize="15sp"
-    		  		  android:padding="5dp" 
-    		  		  android:text="Total">
+        		 	  android:layout_margin="0dp"
+	    	 		  android:text="Total">
 			</TextView>
 			<TextView android:id="@+id/balanceTitle"
-	    	  		  android:textSize="15sp"
-    		  		  android:padding="5dp" 
-    		  		  android:text="Saldo">
+        		 	  android:layout_margin="0dp"
+	    	  		  android:text="Saldo">
 			</TextView>   
         </TableRow>
     </TableLayout>
     <TextView android:id="@+id/unitcostTv"
-        	  android:layout_width="wrap_content"
+         	  android:layout_width="wrap_content"
         	  android:layout_height="wrap_content"
         	  android:layout_below="@+id/participantList"
         	  android:enabled="false"
@@ -64,6 +65,7 @@
         	  android:layout_width="wrap_content"
         	  android:layout_height="wrap_content"
         	  android:layout_below="@+id/unitcostTv"
+        	  android:scrollbars="vertical"
         	  android:enabled="false">
     </TableLayout>
     <Button

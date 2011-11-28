@@ -7,19 +7,26 @@
 
     <application android:icon="@drawable/icon" android:name=".ContasFaceis" android:debuggable="true">
         <activity android:name=".MainActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:theme="@style/money">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserPageActivity">
+        <activity android:name=".UserPageActivity"
+            	  android:theme="@style/money">
         </activity>
-        <activity android:name=".CreateAccountActivity">
+        <activity android:name=".CreateAccountActivity"
+            	  android:theme="@style/money">
         </activity>
-        <activity android:name=".AccountPageActivity">
+        <activity android:name=".AccountPageActivity"
+            	  android:theme="@style/money">
         </activity>
-        <activity android:name=".AddExpenseActivity">
+        <activity android:name=".AddExpenseActivity"
+            	  android:theme="@style/money">
+        </activity>
+        <activity android:name=".AccountHistory">
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>

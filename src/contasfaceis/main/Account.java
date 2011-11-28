@@ -1,6 +1,7 @@
 package contasfaceis.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -54,7 +55,7 @@ public class Account {
 			JSONObject participant = participantsList.getJSONObject(i);
 			//if(!participant.getString("role").equals("ADMIN")) {
 				JSONObject user = participant.getJSONObject("user");
-				User u = new User(user.getString("firstName"),user.getString("lastName"),user.getString("email"));
+				User u = new User(user.getString("name"),user.getString("email"));
 				particAcc = new ParticipantAccount(u, this, participant.getString("status"), participant.getString("role"), participant.getInt("id"));
 				participAccount.add(particAcc);
 			//}
@@ -143,6 +144,27 @@ public class Account {
 		return false;
 	}
 	
+	public boolean clearAccount(String url, String accesstoken) throws AccException {
+		METHOD = "clearAccount";
+		
+		JSONObject JSon = null;
+		Http http = new Http();
+	
+		try {
+			JSon = http.doGet(url+"/account/"+id.toString()+"/clear/"+accesstoken);
+			if(!JSon.isNull("success")) 
+				return true;
+			if(!JSon.isNull("error")) {
+				throw new AccException(JSon.getString("error"));
+			}
+		} catch(JSONException JSe) {
+			Log.e(this.getClass().getSimpleName()+"/"+METHOD,JSe.getMessage());
+			return false;
+		}
+		return false;
+		
+	}
+	
 	public boolean createAccountonServer(String URL, ArrayList<NameValuePair> accountInfo, User adminuser) {
 		METHOD = "createAccountonServer";
 		
@@ -167,8 +189,9 @@ public class Account {
 	
 		try {
 			JSon = http.doGet(url+"/participationaccount/"+ParticAccId.toString()+"/confirm/"+fBaccessToken);
-			if(!JSon.isNull("success")) 
+			if(!JSon.isNull("success")) {
 				return true;
+			}
 			if(!JSon.isNull("error")) {
 				throw new AccException(JSon.getString("error"));
 			}
@@ -212,6 +235,7 @@ public class Account {
 							particAcc.setTotalSpent(amountSpent);
 							
 							//Search for credit or debit transaction for this user
+							particAcc.setDebitCreditList(null);
 							for(int k=0; k<transactionstoResolve.length(); k++) {
 								JSONObject beneficiary_payor = transactionstoResolve.getJSONObject(k);
 								JSONObject beneficiary = beneficiary_payor.getJSONObject("beneficiary");
@@ -243,6 +267,46 @@ public class Account {
 		return false;
 	}
 
+	public ArrayList<HashMap<String, String>> getAccountHistory(String url, String accesstoken) throws AccException {
+		METHOD = "getAccountHistory";
+		
+		JSONObject JSon = null;
+		Http http = new Http();
+		ArrayList<HashMap<String, String>> expenses = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> map;
+	
+		try {
+			JSon = http.doGet(url+"/account/"+this.id.toString()+"/expense/all/"+accesstoken);
+			if(!JSon.isNull("listOfExpenses")) {
+				JSONArray listofExpenses = JSon.getJSONArray("listOfExpenses");
+				
+				for(int i=0; i<listofExpenses.length(); i++) {
+					map = new HashMap<String, String>();
+					JSONObject expense = listofExpenses.getJSONObject(i);
+					String user = expense.getJSONObject("owner").getJSONObject("user").getString("name");
+					String description = expense.getString("description");
+					String amount = expense.getString("amount");
+					
+					map.put("amount", amount);
+					map.put("description", description);
+					map.put("user", user);
+					
+					expenses.add(map);
+				}
+				
+				return expenses;
+			}
+			if(!JSon.isNull("error")) {
+				throw new AccException(JSon.getString("error"));
+			}
+		} catch(JSONException JSe) {
+			Log.e(this.getClass().getSimpleName()+"/"+METHOD,JSe.getMessage());
+			return null;
+		}
+		return null;
+		
+	}
+	
 	public boolean deleteAccount(String URL, String accesstoken) throws AccException {
 		METHOD = "deleteAccount";
 		
@@ -271,4 +335,5 @@ public class Account {
 			super(message);
 		}
 	}
+
 }

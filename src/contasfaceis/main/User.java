@@ -12,8 +12,7 @@ import android.util.Log;
 public class User {
 	
 	private String METHOD;
-	private String firstName;
-	private String lastName;
+	private String name;
 	private String email;
 	private String FBaccessToken;
 	
@@ -31,23 +30,20 @@ public class User {
 		FBaccessToken = accessToken;
 	}
 	
-	public User(String fname, String lname, String email) {
-		firstName = fname;
-		lastName = lname;
+	public User(String name, String email) {
+		this.name = name;
 		this.email = email;
 	}
 	
-	public void setParameters(String fname, String lname, String email) {
-		firstName = fname;
-		lastName = lname;
+	public void setParameters(String name, String email) {
+		this.name = name;
 		this.email = email;
 	}
 	
 	public boolean setParameters(JSONObject userInfo) {
 		METHOD = "setParametersJSON";
 		try {
-			firstName = userInfo.getString("firstName");
-			lastName = userInfo.getString("lastName");
+			name = userInfo.getString("name");
 			email = userInfo.getString("email");
 			return true;
 		} catch (JSONException JSe) {
@@ -56,28 +52,22 @@ public class User {
 		}
 	}
 	
-	public void setFirstName(String fname) {
-		firstName = fname;
-	}
-	
-	public void setLastName(String lname) {
-		lastName = lname;
+	public void setLastName(String name) {
+		this.name = name;
 	}
 	
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public String getLastName() {
-		return lastName;
-	}
-	
 	public String getName() {
-		return firstName+" "+lastName;
+		return name;
+	}
+	
+	public String getFirstName() {
+		int index = name.indexOf(" ");
+		String firstName = name.substring(0, index);
+		return firstName;
 	}
 	
 	public String getEmail() {

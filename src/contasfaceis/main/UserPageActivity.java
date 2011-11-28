@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +34,7 @@ public class UserPageActivity extends Activity {
 	private TextView greetingtv;
 	private Button createAccountbt;
 	private ListView accountListlt;
+	private View listtitleTV;
 
 	private ArrayList<ParticipantAccount> particAccList;
 	private AccCustomAdapter listAdapter;
@@ -64,14 +66,20 @@ public class UserPageActivity extends Activity {
 					"Você foi convidado para novas contas! ", 10).show();
 
 		accountListlt = (ListView) this.findViewById(R.id.accountList);
-		TextView listtitleTV = new TextView(this.getApplicationContext());
-		listtitleTV.setText("Suas Contas");
-		listtitleTV.setTextSize(20);
+		LayoutInflater inflater = getLayoutInflater();
+        listtitleTV = inflater.inflate(R.layout.useraccountslistheader, (ViewGroup) findViewById(R.id.accslistHeader));
 		accountListlt.addHeaderView(listtitleTV);
 		listAdapter = new AccCustomAdapter();
 		accountListlt.setAdapter(listAdapter);
 
 		accountListlt.setOnItemClickListener(new ListAccOnItemClickListener());
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK)
+			this.finish();
+		return true;
 	}
 
 	private boolean checkforPendingAccounts() {
@@ -131,10 +139,9 @@ public class UserPageActivity extends Activity {
 
 			TV = (TextView) row;
 			TV.setText(particAcc.getAccount().getName());
-			// TV.setId(particAcc.getID());
+		
 			if (particAcc.getStatus().equals("CONFIRMED")) {
 				TV.setTypeface(Typeface.DEFAULT);
-				TV.setTextColor(Color.WHITE);
 			} else {
 				TV.setTypeface(Typeface.DEFAULT_BOLD);
 				TV.setTextColor(Color.RED);
@@ -165,6 +172,11 @@ public class UserPageActivity extends Activity {
 					MainActivity.class);
 			UserPageActivity.this.startActivity(intent);
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 }

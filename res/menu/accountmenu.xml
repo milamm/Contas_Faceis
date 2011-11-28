@@ -2,6 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 	<item android:id="@+id/addexpense"
 	      android:title="@string/addpay"/>
+	<item android:id="@+id/delpays"
+	      android:title="@string/delpays"/>
     <item android:id="@+id/calculate"
 	      android:title="@string/calculate"/>
 	<item android:id="@+id/seehist"

@@ -42,14 +42,7 @@ public class Http {
 				InputStream contentIS = entity.getContent();
 				String content = convertStreamtoString(contentIS);
 			
-				//if(content.startsWith("[")) {
-					JSon = new JSONObject(content);
-				//}
-				//else {
-					//JSONObject JSonObj = new JSONObject(content);
-					//JSon.put(JSonObj);
-				//}
-					
+				JSon = new JSONObject(content);					
 			} else {
 				Log.e(this.getClass().getSimpleName()+"/"+METHOD, "Failed to connect to server");
 			}
