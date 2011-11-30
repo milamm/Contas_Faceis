@@ -11,6 +11,7 @@ import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,7 +79,6 @@ public class AccountPageActivity extends Activity {
 		unitCostTV = (TextView) this.findViewById(R.id.unitcostTv);
 		debitcreditTL = (TableLayout) this.findViewById(R.id.debitcreditTl);
 		debitcreditTL.setEnabled(false);
-		//debitcreditTL.setVisibility(View.GONE);
 		
 		if (pA.getStatus().equals("PENDING")) {
 			BT1 = (Button) this.findViewById(R.id.refusebt);
@@ -104,13 +104,15 @@ public class AccountPageActivity extends Activity {
 				particList = currentAccount.getParticipants();
 				
 			populateParticipantTable();
+			if(!newUser)
+				calculateDebitCredit();
 			
 		} catch (AccException e) {
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
 	
-	@Override
+	/*@Override
 	protected void onResume() {
 		super.onResume();
 		
@@ -119,10 +121,28 @@ public class AccountPageActivity extends Activity {
 		index = parent.indexOfChild(debitcreditTL);
 		parent.removeViewAt(index);
 		/*debitcreditTL.setVisibility(View.GONE);
-		debitcreditTL.setEnabled(false);*/
+		debitcreditTL.setEnabled(false);
 		
 		if(!newUser)
 			calculateDebitCredit();
+	}*/
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			Intent intent = new Intent(AccountPageActivity.this,
+					UserPageActivity.class);
+			AccountPageActivity.this.startActivity(intent);
+			return true;
+
+		case KeyEvent.KEYCODE_MENU:
+			openOptionsMenu();
+			return true;
+			
+		default:
+			return true;
+		}
 	}
 	
 	@Override
@@ -166,9 +186,8 @@ public class AccountPageActivity extends Activity {
 	
 	    switch (item.getItemId()) {
 	    case R.id.addexpense:
-	    	Intent intentExp = new Intent(AccountPageActivity.this,
-					AddExpenseActivity.class);
-			AccountPageActivity.this.startActivity(intentExp);
+	    	Intent intentAddExp = new Intent(AccountPageActivity.this, AddExpenseActivity.class);
+			AccountPageActivity.this.startActivity(intentAddExp);
 	        return true;
 	    case R.id.delpays:
 	    	try {
@@ -302,6 +321,8 @@ public class AccountPageActivity extends Activity {
 		
 		unitCostTV.setText("Custo por pessoa = "+currentAccount.getUnitCost().toString());
 		
+		debitcreditTL.removeAllViews();
+		
 		for(int i=0; i<particList.size(); i++) {
 			ParticipantAccount participant = particList.get(i); 
 			String email = participant.getUser().getEmail();
@@ -313,6 +334,8 @@ public class AccountPageActivity extends Activity {
 				for(int j=0; j<debitcreditList.size(); j++) {
 					String[] debitcredit = debitcreditList.get(j);
 					TextView debitcreditTV = new TextView(this);
+					debitcreditTV.setPadding(5, 0, 5, 0);
+					debitcreditTV.setTextSize(18);
 					
 					if(debitcredit[0].equals("receive"))
 						debitcreditTV.setText(receiveCurUser[0]+" "+debitcredit[1]+" "+receiveCurUser[1]+" "+debitcredit[2]);
@@ -329,6 +352,8 @@ public class AccountPageActivity extends Activity {
 				for(int j=0; j<debitcreditList.size(); j++) {
 					String[] debitcredit = debitcreditList.get(j);
 					TextView debitcreditTV = new TextView(this);
+					debitcreditTV.setPadding(5, 0, 5, 0);					
+					debitcreditTV.setTextSize(18);
 					
 					if(debitcredit[0].equals("owes") & !debitcredit[2].equals(currentUser.getName())) {
 						debitcreditTV.setText(participant.getUser().getName()+" "+pay[0]+" "+debitcredit[1]+" "+pay[1]+" "+debitcredit[2]);
@@ -343,7 +368,7 @@ public class AccountPageActivity extends Activity {
 		}
 		debitcreditTL.setEnabled(true);
 		debitcreditTL.setVisibility(View.VISIBLE);
-		parent.addView(debitcreditTL);
+		//parent.addView(debitcreditTL);
 		
 	}
 	
@@ -375,7 +400,7 @@ public class AccountPageActivity extends Activity {
 			} finally {
 				if (resultOK) {
 					Intent intent = new Intent(AccountPageActivity.this,
-							UserPageActivity.class);
+							AccountPageActivity.class);
 					AccountPageActivity.this.startActivity(intent);
 				}
 			}

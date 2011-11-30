@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="match_parent"
+    		android:layout_height="match_parent"
+    	    android:scrollbars="vertical">
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -42,16 +46,21 @@
         android:id="@+id/partic" 
         android:layout_width="match_parent"
         android:layout_margin="0dp"
-        android:inputType="textEmailAddress">
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/black">
     </EditText>
         
     <Button
         android:id="@+id/addpartic"
         android:layout_gravity="right"
+        android:layout_margin="3dp"
         android:text="Adicionar"/>
     <Button
         android:id="@+id/createacc"
-        android:layout_gravity="bottom"
+        android:layout_width="100dp"
+        android:padding="8dp"
+        android:layout_gravity="center"
         android:text="Criar" />
 
 </LinearLayout>
+</ScrollView>

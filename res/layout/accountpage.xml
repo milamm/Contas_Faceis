@@ -14,6 +14,7 @@
     <TextView android:id="@+id/accname"
          	  android:background="@android:drawable/button_onoff_indicator_off"
        	 	  android:layout_width="fill_parent"
+       	 	  android:layout_margin="0dp"
        		  android:layout_below="@+id/username"
 	  	      android:layout_centerHorizontal="true"
 	  	      android:gravity="center_horizontal"
@@ -60,14 +61,19 @@
         	  android:layout_height="wrap_content"
         	  android:layout_below="@+id/participantList"
         	  android:enabled="false"
+        	  android:textSize="15sp"
+        	  android:padding="0dp"
         	 />
-    <TableLayout android:id="@+id/debitcreditTl"
-        	  android:layout_width="wrap_content"
-        	  android:layout_height="wrap_content"
-        	  android:layout_below="@+id/unitcostTv"
-        	  android:scrollbars="vertical"
-        	  android:enabled="false">
-    </TableLayout>
+    <ScrollView android:id="@+id/debitcreditSV"
+        		android:layout_width="fill_parent"
+        	    android:layout_height="250dp"
+        	    android:layout_below="@+id/unitcostTv"
+        		android:scrollbars="vertical">
+    	<TableLayout android:id="@+id/debitcreditTl"
+        	  	android:layout_margin="0dp"
+        		  android:enabled="false">
+    	</TableLayout>
+    </ScrollView>
     <Button
         android:id="@+id/refusebt"
         android:layout_width="wrap_content"

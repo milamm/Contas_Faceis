@@ -71,16 +71,19 @@ public class MainActivity extends Activity {
                 User user = new User(accesstoken);
                 
                 appState.setcurrentUser(user);
-                JSONObject JSONUser = appState.getcurrentUser().getUserInformationFromServer(appState.getURL()); 
-                if(appState.getcurrentUser().setParameters(JSONUser)) {
-                    Intent intent = new Intent(MainActivity.this, UserPageActivity.class);
-                    MainActivity.this.startActivity(intent);
-                } else
-                    mText.setText("Usuario desconhecido.");
-                }
-                Intent intent = new Intent(MainActivity.this, UserPageActivity.class);
-                MainActivity.this.startActivity(intent);
-            
+                JSONObject JSONUser = appState.getcurrentUser().getUserInformationFromServer(appState.getURL());
+                if(JSONUser.length()!=0 ) {
+                	if(appState.getcurrentUser().setParameters(JSONUser)) {
+                    	Intent intent = new Intent(MainActivity.this, UserPageActivity.class);
+                    	MainActivity.this.startActivity(intent);
+                	} else
+                    	mText.setText("Usuario desconhecido.");
+                	}
+            	} else {
+            	   	SessionStore.clear(getApplicationContext());
+            	   	Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            	   	MainActivity.this.startActivity(intent);
+            	}
         }
     }
 

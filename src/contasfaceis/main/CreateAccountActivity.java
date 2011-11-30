@@ -62,6 +62,10 @@ public class CreateAccountActivity extends Activity {
 			
 			if(email.matches("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
 				TextView particAddedtv = new TextView(v.getContext());
+				particAddedtv.setTextColor(R.drawable.black);
+				particAddedtv.setTextSize(15);
+				particAddedtv.setBackgroundResource(android.R.drawable.editbox_dropdown_light_frame);
+				particAddedtv.setPadding(10, 0, 0, 0);
 				particAddedtv.setText(email);
 			
 				ViewGroup parent = (ViewGroup) v.getParent();
